@@ -3,7 +3,10 @@ const syllabusData = [
     {
         unit: 1,
         title: "Introduction & Physical Layer",
-        pdfFile: "unit1.pdf", // Place your PDF in the same folder and name it unit1.pdf
+        pdfFile: "unit1.pdf",
+        alternatePdfs: [
+            { name: "Alternate Notes", file: "alternates/unit1alt.pdf" }
+        ],
         topics: [
             { name: "Network Types (LAN, MAN, WAN)", important: true },
             { name: "Network Topologies", important: true },
@@ -19,7 +22,10 @@ const syllabusData = [
     {
         unit: 2,
         title: "Data Link Layer",
-        pdfFile: "unit2.pdf", // Place your PDF in the same folder and name it unit2.pdf
+        pdfFile: "unit2.pdf",
+        alternatePdfs: [
+            { name: "Alternate Notes", file: "alternates/unit2alt.pdf" }
+        ],
         topics: [
             { name: "Data Link Layer Design Issues", important: true },
             { name: "Framing - Fixed Size & Variable Size", important: true },
@@ -43,7 +49,10 @@ const syllabusData = [
     {
         unit: 3,
         title: "Media Access Control & Wired LANs",
-        pdfFile: "unit3.pdf", // Place your PDF in the same folder and name it unit3.pdf
+        pdfFile: "unit3.pdf",
+        alternatePdfs: [
+            { name: "Alternate Notes", file: "alternates/unit3alt.pdf" }
+        ],
         topics: [
             { name: "Random Access - ALOHA", important: true },
             { name: "CSMA (Carrier Sense Multiple Access)", important: true },
@@ -65,7 +74,10 @@ const syllabusData = [
     {
         unit: 4,
         title: "Network Layer & Internetworking",
-        pdfFile: "unit4.pdf", // Place your PDF in the same folder and name it unit4.pdf
+        pdfFile: "unit4.pdf",
+        alternatePdfs: [
+            { name: "Alternate Notes", file: "alternates/unit4alt.pdf" }
+        ],
         topics: [
             { name: "Network Layer Design Issues", important: true },
             { name: "Store and Forward Packet Switching", important: true },
@@ -103,7 +115,14 @@ const syllabusData = [
     {
         unit: 5,
         title: "Transport & Application Layer",
-        pdfFile: "unit5.pdf", // Place your PDF in the same folder and name it unit5.pdf
+        pdfFile: "unit5.pdf",
+        alternatePdfs: [
+            { name: "Alternate Notes 1", file: "alternates/u51.pdf" },
+            { name: "WWW Notes", file: "alternates/cnwww.pdf" },
+            { name: "HTTP Notes", file: "alternates/httpcn.pdf" },
+            { name: "Email Architecture", file: "alternates/cnemailarchitecture.pdf" },
+            { name: "Web-based Mail", file: "alternates/unit5webbasedmail.pdf" }
+        ],
         topics: [
             { name: "Transport Layer Introduction", important: false },
             { name: "Transport Layer Services", important: true },
@@ -228,6 +247,35 @@ function createUnitCard(unit) {
     headerDiv.setAttribute('aria-expanded', 'false');
     headerDiv.setAttribute('aria-controls', collapseId);
 
+    // Create alternate PDFs HTML
+    let alternatePdfsHTML = '';
+    if (unit.alternatePdfs && unit.alternatePdfs.length > 0) {
+        if (unit.alternatePdfs.length === 1) {
+            // Single alternate PDF - show as button
+            alternatePdfsHTML = `
+                <button class="btn-alternate" onclick="event.stopPropagation(); openPDF('${unit.alternatePdfs[0].file}', 'Unit ${unit.unit} - ${unit.alternatePdfs[0].name}')">
+                    <i class="fas fa-file-alt"></i> Alternate
+                </button>
+            `;
+        } else {
+            // Multiple alternate PDFs - show as dropdown
+            alternatePdfsHTML = `
+                <div class="dropdown" onclick="event.stopPropagation();">
+                    <button class="btn-alternate dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-file-alt"></i> Alternates
+                    </button>
+                    <ul class="dropdown-menu">
+                        ${unit.alternatePdfs.map(pdf => `
+                            <li><a class="dropdown-item" href="${pdf.file}" target="_blank">
+                                <i class="fas fa-file-pdf"></i> ${pdf.name}
+                            </a></li>
+                        `).join('')}
+                    </ul>
+                </div>
+            `;
+        }
+    }
+
     headerDiv.innerHTML = `
         <div class="unit-title-section">
             <h3 class="unit-title">UNIT ${unit.unit}: ${unit.title}</h3>
@@ -237,6 +285,7 @@ function createUnitCard(unit) {
             <button class="btn-pdf" onclick="event.stopPropagation(); openPDF('${unit.pdfFile}', 'Unit ${unit.unit}')">
                 <i class="fas fa-file-pdf"></i> View PDF
             </button>
+            ${alternatePdfsHTML}
             <button class="btn-collapse">
                 <i class="fas fa-chevron-down"></i>
             </button>
