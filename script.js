@@ -259,14 +259,15 @@ function createUnitCard(unit) {
             `;
         } else {
             // Multiple alternate PDFs - show as dropdown
+            const dropdownId = `dropdown-unit${unit.unit}`;
             alternatePdfsHTML = `
-                <div class="dropdown" onclick="event.stopPropagation();">
-                    <button class="btn-alternate dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                <div class="dropdown">
+                    <button class="btn-alternate dropdown-toggle" type="button" id="${dropdownId}" data-bs-toggle="dropdown" aria-expanded="false" onclick="event.stopPropagation();">
                         <i class="fas fa-file-alt"></i> Alternates
                     </button>
-                    <ul class="dropdown-menu">
-                        ${unit.alternatePdfs.map(pdf => `
-                            <li><a class="dropdown-item" href="${pdf.file}" target="_blank">
+                    <ul class="dropdown-menu" aria-labelledby="${dropdownId}">
+                        ${unit.alternatePdfs.map((pdf, index) => `
+                            <li><a class="dropdown-item" href="#" onclick="event.preventDefault(); event.stopPropagation(); openPDF('${pdf.file}', 'Unit ${unit.unit} - ${pdf.name}'); return false;">
                                 <i class="fas fa-file-pdf"></i> ${pdf.name}
                             </a></li>
                         `).join('')}

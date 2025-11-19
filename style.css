@@ -290,6 +290,7 @@ body {
 /* Dropdown Styling for Alternates */
 .unit-actions .dropdown {
     display: inline-block;
+    position: relative;
 }
 
 .dropdown-menu {
@@ -299,6 +300,7 @@ body {
     border-radius: 8px;
     padding: 0.5rem 0;
     min-width: 200px;
+    z-index: 1050;
 }
 
 .dropdown-item {
@@ -309,11 +311,15 @@ body {
     align-items: center;
     gap: 0.5rem;
     font-size: 0.9rem;
+    cursor: pointer;
+    text-decoration: none;
 }
 
-.dropdown-item:hover {
+.dropdown-item:hover,
+.dropdown-item:focus,
+.dropdown-item:active {
     background-color: var(--accent-color);
-    color: white;
+    color: white !important;
 }
 
 .dropdown-item i {
